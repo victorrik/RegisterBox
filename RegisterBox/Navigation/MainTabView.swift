@@ -7,33 +7,23 @@ struct MainTabView: View {
         TabView(selection: $selectedTab) {
 
             Tab("POS", systemImage: "storefront", value: 0) {
-                Text("POS — próximamente")
-                    .font(.rbTitle)
-                    .foregroundStyle(Color.rbGray)
+                POSView()
             }
 
             Tab("Inventario", systemImage: "archivebox", value: 1) {
-                Text("Inventario — próximamente")
-                    .font(.rbTitle)
-                    .foregroundStyle(Color.rbGray)
+                InventoryView()
             }
 
             Tab("Clientes", systemImage: "person.2", value: 2) {
-                Text("Clientes — próximamente")
-                    .font(.rbTitle)
-                    .foregroundStyle(Color.rbGray)
+                CustomersView()
             }
 
             Tab("Historial", systemImage: "clock", value: 3) {
-                Text("Historial — próximamente")
-                    .font(.rbTitle)
-                    .foregroundStyle(Color.rbGray)
+                SalesHistoryView()
             }
 
             Tab("Ajustes", systemImage: "gearshape", value: 4) {
-                Text("Ajustes — próximamente")
-                    .font(.rbTitle)
-                    .foregroundStyle(Color.rbGray)
+                SettingsView()
             }
         }
         .tint(Color.rbAccent)

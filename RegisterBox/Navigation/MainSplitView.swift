@@ -37,20 +37,15 @@ struct MainSplitView: View {
         } detail: {
             switch selectedItem {
             case .pos:
-                Text("POS — próximamente")
-                    .font(.rbTitle).foregroundStyle(Color.rbGray)
+                POSView()
             case .inventory:
-                Text("Inventario — próximamente")
-                    .font(.rbTitle).foregroundStyle(Color.rbGray)
+                InventoryView()
             case .customers:
-                Text("Clientes — próximamente")
-                    .font(.rbTitle).foregroundStyle(Color.rbGray)
+                CustomersView()
             case .history:
-                Text("Historial — próximamente")
-                    .font(.rbTitle).foregroundStyle(Color.rbGray)
+                SalesHistoryView()
             case .settings:
-                Text("Ajustes — próximamente")
-                    .font(.rbTitle).foregroundStyle(Color.rbGray)
+                SettingsView()
             case nil:
                 Text("Selecciona una sección")
                     .font(.rbTitle).foregroundStyle(Color.rbGray)
