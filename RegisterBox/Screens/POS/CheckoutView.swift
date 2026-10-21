@@ -69,6 +69,7 @@ struct CheckoutView: View {
                     .padding(.bottom, Spacing.xxl)
                 }
             }
+            .scrollDismissesKeyboard(.interactively)
             .navigationTitle("Cobrar")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

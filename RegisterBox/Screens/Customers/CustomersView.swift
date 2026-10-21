@@ -80,6 +80,7 @@ struct CustomersView: View {
                         }
                     }
                     .listStyle(.plain)
+                    .scrollDismissesKeyboard(.immediately)
                 }
             }
             .navigationTitle("Clientes")

@@ -100,6 +100,7 @@ struct InventoryView: View {
                         }
                     }
                     .listStyle(.plain)
+                    .scrollDismissesKeyboard(.immediately)
                 }
             }
             .navigationTitle("Inventario")

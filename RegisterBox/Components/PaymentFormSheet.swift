@@ -53,6 +53,7 @@ struct PaymentFormSheet: View {
                 }
                 .padding(.horizontal, Spacing.md)
             }
+            .scrollDismissesKeyboard(.interactively)
             .navigationTitle("Registrar abono")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

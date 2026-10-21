@@ -63,6 +63,7 @@ struct CategoryFormView: View {
                 }
                 .padding(Spacing.md)
             }
+            .scrollDismissesKeyboard(.interactively)
             .navigationTitle(isEditing ? "Editar categoría" : "Nueva categoría")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

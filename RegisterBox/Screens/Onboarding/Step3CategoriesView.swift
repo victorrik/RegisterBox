@@ -183,6 +183,7 @@ struct CategoryFormSheet: View {
                 }
                 .padding(Spacing.md)
             }
+            .scrollDismissesKeyboard(.interactively)
             .navigationTitle("Nueva categoría")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

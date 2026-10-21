@@ -123,6 +123,7 @@ private struct QuickProductFormSheet: View {
                 }
                 .padding(Spacing.md)
             }
+            .scrollDismissesKeyboard(.interactively)
             .navigationTitle("Nuevo producto")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

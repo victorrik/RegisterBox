@@ -119,6 +119,7 @@ struct ProductFormView: View {
                 }
                 .padding(Spacing.md)
             }
+            .scrollDismissesKeyboard(.interactively)
             .navigationTitle(isEditing ? "Editar producto" : "Nuevo producto")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

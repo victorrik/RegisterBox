@@ -37,6 +37,7 @@ struct CustomerFormView: View {
                 }
                 .padding(Spacing.md)
             }
+            .scrollDismissesKeyboard(.interactively)
             .navigationTitle(isEditing ? "Editar cliente" : "Nuevo cliente")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
