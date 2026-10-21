@@ -28,6 +28,10 @@ struct MyApp: App {
     @State private var appState = AppState()
     @State private var cartStore = CartStore()
 
+    init() {
+        FontRegistration.registerRubikFonts()
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()
