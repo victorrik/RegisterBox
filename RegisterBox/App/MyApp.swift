@@ -34,6 +34,12 @@ struct MyApp: App {
                 .modelContainer(container)
                 .environment(appState)
                 .environment(cartStore)
+                .environment(\.storeService,    LocalStoreService(context: container.mainContext))
+                .environment(\.categoryService, LocalCategoryService(context: container.mainContext))
+                .environment(\.productService,  LocalProductService(context: container.mainContext))
+                .environment(\.customerService, LocalCustomerService(context: container.mainContext))
+                .environment(\.saleService,     LocalSaleService(context: container.mainContext))
+                .environment(\.paymentService,  LocalPaymentService(context: container.mainContext))
         }
     }
 }
