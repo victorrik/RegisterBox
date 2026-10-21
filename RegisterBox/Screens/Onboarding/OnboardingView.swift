@@ -7,6 +7,8 @@ struct OnboardingView: View {
     var body: some View {
         ZStack {
             Color.rbBackground.ignoresSafeArea()
+                .contentShape(Rectangle())
+                .onTapGesture { hideKeyboard() }
             stepView
         }
         .animation(.easeInOut(duration: 0.3), value: appState.onboardingStep)

@@ -11,8 +11,19 @@ final class AppState {
     // MARK: - Onboarding
     // Guardamos en UserDefaults manualmente para que @Observable
     // pueda trackear los cambios y notificar a SwiftUI.
-    var onboardingStep: Int = UserDefaults.standard.integer(forKey: "onboardingStep") {
-        didSet { UserDefaults.standard.set(onboardingStep, forKey: "onboardingStep") }
+    /// Último paso válido del onboarding (0...3).
+    static let maxOnboardingStep = 3
+
+    var onboardingStep: Int = min(max(UserDefaults.standard.integer(forKey: "onboardingStep"), 0), AppState.maxOnboardingStep) {
+        didSet {
+            // Acotar siempre al rango válido para evitar estados corruptos.
+            let clamped = min(max(onboardingStep, 0), AppState.maxOnboardingStep)
+            if clamped != onboardingStep {
+                onboardingStep = clamped
+                return
+            }
+            UserDefaults.standard.set(onboardingStep, forKey: "onboardingStep")
+        }
     }
 
     var onboardingComplete: Bool = UserDefaults.standard.bool(forKey: "onboardingComplete") {
@@ -20,19 +31,27 @@ final class AppState {
     }
 
     // MARK: - Init
-    init() {}
+    init() {
+        // Si el onboarding no terminó pero el step persistido estaba fuera de
+        // rango (estado corrupto de una ejecución previa), reinicia a 0.
+        let rawStep = UserDefaults.standard.integer(forKey: "onboardingStep")
+        if !onboardingComplete && (rawStep < 0 || rawStep > AppState.maxOnboardingStep) {
+            onboardingStep = 0
+        }
+    }
 
     // MARK: - Helpers
 
-    /// Avanza al siguiente paso del onboarding.
+    /// Avanza al siguiente paso del onboarding (sin superar el máximo).
     func nextOnboardingStep() {
+        guard onboardingStep < AppState.maxOnboardingStep else { return }
         onboardingStep += 1
     }
 
     /// Marca el onboarding como completado.
     func completeOnboarding() {
         onboardingComplete = true
-        onboardingStep = 4
+        onboardingStep = AppState.maxOnboardingStep
     }
 
     /// Reinicia el onboarding (debug / cambio de tienda).

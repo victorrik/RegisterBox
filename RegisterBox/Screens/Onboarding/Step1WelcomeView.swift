@@ -54,21 +54,17 @@ struct Step1WelcomeView: View {
 
             // Botón siguiente
             RBButton(title: "Comenzar", style: .primary, icon: "arrow.right") {
-                print("🟡 Botón tocado — storeName: '\(storeName)'")
                 let trimmed = storeName.trimmingCharacters(in: .whitespaces)
                 guard !trimmed.isEmpty else {
-                    print("🔴 Nombre vacío, mostrando error")
                     showError = true
                     return
                 }
-                print("🟢 Creando tienda: \(trimmed)")
                 let store = Store(name: trimmed)
                 context.insert(store)
                 try? context.save()
                 appState.activeStore = store
-                print("🟢 Step antes: \(appState.onboardingStep)")
+                isFocused = false
                 appState.nextOnboardingStep()
-                print("🟢 Step después: \(appState.onboardingStep)")
             }
             .padding(.horizontal, Spacing.md)
             .padding(.bottom, Spacing.xxl)
