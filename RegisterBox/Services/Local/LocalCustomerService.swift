@@ -9,11 +9,12 @@ final class LocalCustomerService: CustomerServiceProtocol {
     }
 
     func fetchAll(storeId: UUID) async throws -> [Customer] {
+        // Filtro de store en memoria: SwiftData no traduce `store?.id` en #Predicate.
         let descriptor = FetchDescriptor<Customer>(
-            predicate: #Predicate { $0.store?.id == storeId && $0.deletedAt == nil },
+            predicate: #Predicate { $0.deletedAt == nil },
             sortBy: [SortDescriptor(\.name)]
         )
-        return try context.fetch(descriptor)
+        return try context.fetch(descriptor).filter { $0.store?.id == storeId }
     }
 
     func create(_ customer: Customer) async throws {

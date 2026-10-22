@@ -12,11 +12,12 @@ final class LocalSaleService: SaleServiceProtocol {
     }
 
     func fetchAll(storeId: UUID) async throws -> [Sale] {
+        // Filtro de store en memoria: SwiftData no traduce `store?.id` en #Predicate.
         let descriptor = FetchDescriptor<Sale>(
-            predicate: #Predicate { $0.store?.id == storeId && $0.deletedAt == nil },
+            predicate: #Predicate { $0.deletedAt == nil },
             sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
         )
-        return try context.fetch(descriptor)
+        return try context.fetch(descriptor).filter { $0.store?.id == storeId }
     }
 
     /// Crea una venta a partir del carrito, descuenta stock y registra historial.
@@ -89,11 +90,11 @@ final class LocalPaymentService: PaymentServiceProtocol {
     }
 
     func fetchAll(saleId: UUID) async throws -> [Payment] {
+        // Filtro de sale en memoria: SwiftData no traduce `sale?.id` en #Predicate.
         let descriptor = FetchDescriptor<Payment>(
-            predicate: #Predicate { $0.sale?.id == saleId },
             sortBy: [SortDescriptor(\.createdAt)]
         )
-        return try context.fetch(descriptor)
+        return try context.fetch(descriptor).filter { $0.sale?.id == saleId }
     }
 
     func create(sale: Sale, amount: Decimal) async throws -> Payment {

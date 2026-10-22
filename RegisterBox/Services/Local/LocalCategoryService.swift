@@ -9,11 +9,13 @@ final class LocalCategoryService: CategoryServiceProtocol {
     }
 
     func fetchAll(storeId: UUID) async throws -> [Category] {
+        // SwiftData no traduce bien `store?.id == storeId` en #Predicate sobre
+        // relaciones opcionales (devuelve vacío), así que filtramos en memoria.
         let descriptor = FetchDescriptor<Category>(
-            predicate: #Predicate { $0.store?.id == storeId && $0.deletedAt == nil },
+            predicate: #Predicate { $0.deletedAt == nil },
             sortBy: [SortDescriptor(\.name)]
         )
-        return try context.fetch(descriptor)
+        return try context.fetch(descriptor).filter { $0.store?.id == storeId }
     }
 
     func create(_ category: Category) async throws {
