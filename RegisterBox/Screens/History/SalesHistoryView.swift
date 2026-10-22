@@ -9,6 +9,7 @@ struct SalesHistoryView: View {
 
     @State private var viewModel: HistoryViewModel?
     @State private var selectedSale: Sale?
+    @State private var showDateSheet = false
 
     var body: some View {
         Group {
@@ -46,11 +47,8 @@ struct SalesHistoryView: View {
     private func content(_ vm: HistoryViewModel) -> some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // Filtro de status
-                statusFilter(vm)
-
-                // Filtro por día
-                dateFilter(vm)
+                // Filtros en una sola línea
+                filterBar(vm)
 
                 // Lista
                 if vm.filteredSales.isEmpty {
@@ -81,6 +79,7 @@ struct SalesHistoryView: View {
                 }
             }
             .navigationTitle("Historial")
+            .navigationBarTitleDisplayMode(.inline)
             .background(Color.rbBackground.ignoresSafeArea())
             .sheet(item: $selectedSale) { sale in
                 SaleDetailView(
@@ -92,78 +91,131 @@ struct SalesHistoryView: View {
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
             }
+            .sheet(isPresented: $showDateSheet) {
+                dateSheet(vm)
+            }
         }
     }
 
-    // MARK: - Status Filter
+    // MARK: - Filter Bar (una sola línea)
     @ViewBuilder
-    private func statusFilter(_ vm: HistoryViewModel) -> some View {
+    private func filterBar(_ vm: HistoryViewModel) -> some View {
         HStack(spacing: Spacing.xs) {
-            filterChip("Todos", isSelected: vm.statusFilter == nil) {
-                vm.statusFilter = nil
+            // Tipo
+            Menu {
+                Picker("Tipo", selection: Binding(
+                    get: { vm.statusFilter },
+                    set: { vm.statusFilter = $0 }
+                )) {
+                    Text("Todos").tag(SaleStatus?.none)
+                    Text("Pagados").tag(SaleStatus?.some(.paid))
+                    Text("Deudas").tag(SaleStatus?.some(.debt))
+                }
+            } label: {
+                filterPill(
+                    title: statusLabel(vm.statusFilter),
+                    isActive: vm.statusFilter != nil,
+                    systemImage: "line.3.horizontal.decrease"
+                )
             }
-            filterChip("Pagados", isSelected: vm.statusFilter == .paid) {
-                vm.statusFilter = .paid
+
+            // Fecha
+            Button {
+                showDateSheet = true
+            } label: {
+                filterPill(
+                    title: vm.dateFilter.map { $0.shortDate } ?? "Fecha",
+                    isActive: vm.dateFilter != nil,
+                    systemImage: "calendar"
+                )
             }
-            filterChip("Deudas", isSelected: vm.statusFilter == .debt) {
-                vm.statusFilter = .debt
+            .buttonStyle(.plain)
+
+            // Cliente
+            Menu {
+                Picker("Cliente", selection: Binding(
+                    get: { vm.customerFilter?.id },
+                    set: { id in vm.customerFilter = vm.customersInSales.first { $0.id == id } }
+                )) {
+                    Text("Todos").tag(UUID?.none)
+                    ForEach(vm.customersInSales) { customer in
+                        Text(customer.name).tag(UUID?.some(customer.id))
+                    }
+                }
+            } label: {
+                filterPill(
+                    title: vm.customerFilter?.name ?? "Cliente",
+                    isActive: vm.customerFilter != nil,
+                    systemImage: "person"
+                )
             }
+
+            Spacer(minLength: 0)
         }
         .padding(.horizontal, Spacing.md)
-        .padding(.top, Spacing.sm)
-        .padding(.bottom, Spacing.xs)
+        .padding(.vertical, Spacing.sm)
     }
 
-    // MARK: - Date Filter
+    private func statusLabel(_ status: SaleStatus?) -> String {
+        switch status {
+        case .none:  return "Tipo"
+        case .paid:  return "Pagados"
+        case .debt:  return "Deudas"
+        }
+    }
+
+    private func filterPill(title: String, isActive: Bool, systemImage: String) -> some View {
+        HStack(spacing: Spacing.xxs) {
+            Image(systemName: systemImage)
+                .font(.system(size: 11, weight: .semibold))
+            Text(title)
+                .font(.rbLabel)
+                .lineLimit(1)
+        }
+        .foregroundStyle(isActive ? .white : Color.rbMedium)
+        .padding(.horizontal, Spacing.sm)
+        .padding(.vertical, Spacing.xs)
+        .background(isActive ? Color.rbAccent : Color.rbSurface)
+        .clipShape(Capsule())
+        .overlay(
+            Capsule().strokeBorder(isActive ? Color.clear : Color.rbLighterGray, lineWidth: 1)
+        )
+    }
+
+    // MARK: - Date Sheet
     @ViewBuilder
-    private func dateFilter(_ vm: HistoryViewModel) -> some View {
-        HStack(spacing: Spacing.xs) {
-            if vm.dateFilter != nil {
+    private func dateSheet(_ vm: HistoryViewModel) -> some View {
+        NavigationStack {
+            VStack(spacing: Spacing.lg) {
                 DatePicker(
-                    "",
+                    "Día",
                     selection: Binding(
                         get: { vm.dateFilter ?? Date() },
                         set: { vm.dateFilter = $0 }
                     ),
                     displayedComponents: .date
                 )
-                .labelsHidden()
+                .datePickerStyle(.graphical)
 
-                Button {
-                    vm.dateFilter = nil
-                } label: {
-                    Label("Todos los días", systemImage: "xmark.circle.fill")
-                        .font(.rbLabel)
-                        .foregroundStyle(Color.rbGray)
+                if vm.dateFilter != nil {
+                    RBButton(title: "Quitar filtro de fecha", style: .secondary, icon: "xmark") {
+                        vm.dateFilter = nil
+                        showDateSheet = false
+                    }
                 }
-                .buttonStyle(.plain)
-            } else {
-                Button {
-                    vm.dateFilter = Date()
-                } label: {
-                    Label("Filtrar por día", systemImage: "calendar")
-                        .font(.rbLabel)
+            }
+            .padding(Spacing.md)
+            .navigationTitle("Filtrar por fecha")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Listo") { showDateSheet = false }
                         .foregroundStyle(Color.rbAccent)
                 }
-                .buttonStyle(.plain)
             }
-            Spacer()
+            .background(Color.rbBackground.ignoresSafeArea())
         }
-        .padding(.horizontal, Spacing.md)
-        .padding(.bottom, Spacing.xs)
-    }
-
-    private func filterChip(_ title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(title)
-                .font(.rbLabel)
-                .foregroundStyle(isSelected ? .white : Color.rbMedium)
-                .padding(.horizontal, Spacing.sm)
-                .padding(.vertical, Spacing.xs)
-                .background(isSelected ? Color.rbAccent : Color.rbSurface)
-                .clipShape(Capsule())
-        }
-        .buttonStyle(.plain)
+        .presentationDetents([.medium])
     }
 }
 

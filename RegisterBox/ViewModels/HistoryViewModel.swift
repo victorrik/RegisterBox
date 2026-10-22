@@ -39,6 +39,12 @@ final class HistoryViewModel {
         }
     }
 
+    /// Clientes únicos presentes en las ventas, para el filtro por cliente.
+    var customersInSales: [Customer] {
+        var seen = Set<UUID>()
+        return sales.compactMap(\.customer).filter { seen.insert($0.id).inserted }
+    }
+
     // MARK: - Filtering
     var filteredSales: [Sale] {
         var result = sales

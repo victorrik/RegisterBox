@@ -5,7 +5,7 @@ import SwiftUI
 struct SaleDetailView: View {
     @Environment(\.dismiss) private var dismiss
 
-    let sale: Sale
+    @Bindable var sale: Sale
     var onRegisterPayment: (Decimal) -> Void
 
     @State private var showPaymentSheet = false

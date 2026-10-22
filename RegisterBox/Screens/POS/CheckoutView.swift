@@ -98,27 +98,14 @@ struct CheckoutView: View {
             viewModel.checkoutMode = isDebt ? .paid : .debt
         } label: {
             HStack(spacing: Spacing.sm) {
-                Image(systemName: isDebt ? "checkmark.square.fill" : "square")
-                    .font(.system(size: IconSize.lg))
+                Image(systemName: isDebt ? "largecircle.fill.circle" : "circle")
+                    .font(.system(size: IconSize.md))
                     .foregroundStyle(isDebt ? Color.rbAccent : Color.rbGray)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Marcar como deuda")
-                        .font(.rbButtonSm)
-                        .foregroundStyle(Color.rbPrimary)
-                    Text(isDebt ? "Se registrará como pendiente de pago" : "Se registrará como pagada")
-                        .font(.rbCaption)
-                        .foregroundStyle(Color.rbGray)
-                }
+                Text("Marcar como deuda")
+                    .font(.rbButtonSm)
+                    .foregroundStyle(Color.rbPrimary)
                 Spacer()
             }
-            .padding(Spacing.md)
-            .background(Color.rbSurface)
-            .clipShape(RoundedRectangle(cornerRadius: Radius.md))
-            .overlay(
-                RoundedRectangle(cornerRadius: Radius.md)
-                    .strokeBorder(isDebt ? Color.rbAccent : Color.rbLighterGray, lineWidth: 1)
-            )
         }
         .buttonStyle(.plain)
     }
