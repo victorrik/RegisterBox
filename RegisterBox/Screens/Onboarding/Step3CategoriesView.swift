@@ -64,7 +64,7 @@ struct Step3CategoriesView: View {
 
             Spacer()
 
-            RBButton(title: "Siguiente", style: .primary, icon: "arrow.right") {
+            RBButton(title: "Siguiente", style: .accent, icon: "arrow.right") {
                 guard !categories.isEmpty else {
                     showError = true
                     return

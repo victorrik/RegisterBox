@@ -57,7 +57,7 @@ struct Step2InfoView: View {
             Spacer()
 
             VStack(spacing: Spacing.sm) {
-                RBButton(title: "Siguiente", style: .primary, icon: "arrow.right") {
+                RBButton(title: "Siguiente", style: .accent, icon: "arrow.right") {
                     // Guardar logo si se ingresó
                     if let store = appState.activeStore, !logoURL.isEmpty {
                         store.logo = logoURL

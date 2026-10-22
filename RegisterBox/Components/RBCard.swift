@@ -13,6 +13,10 @@ struct RBCard<Content: View>: View {
             .padding(padding)
             .background(backgroundColor)
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            .overlay( // borde estilo Card de antd
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .strokeBorder(Color.rbLighterGray, lineWidth: 1)
+            )
             .rbShadow()
     }
 }

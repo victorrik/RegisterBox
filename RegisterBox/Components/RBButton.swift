@@ -1,12 +1,12 @@
 import SwiftUI
 
-// MARK: - RBButton Style
+// MARK: - RBButton Style (Ant Design v5)
 enum RBButtonStyle {
-    case primary      // fondo rbMedium, texto blanco
-    case accent       // fondo rbAccent, texto blanco
-    case secondary    // fondo rbBackground, texto rbPrimary
-    case destructive  // fondo rbError, texto blanco
-    case ghost        // sin fondo, texto rbAccent
+    case primary      // default antd: fondo blanco, borde, texto rbPrimary
+    case accent       // primary antd: fondo rbAccent, texto blanco
+    case secondary    // default antd sobre fondo gris
+    case destructive  // danger antd: fondo rbError, texto blanco
+    case ghost        // text antd: sin fondo, texto rbAccent
 }
 
 // MARK: - RBButton
@@ -36,14 +36,14 @@ struct RBButton: View {
                 }
             }
             .frame(maxWidth: isFullWidth ? .infinity : nil)
-            .padding(.horizontal, Spacing.lg)
-            .padding(.vertical, Spacing.sm + 2)
+            .frame(minHeight: 40) // controlHeight antd
+            .padding(.horizontal, Spacing.md)
             .background(backgroundColor)
             .foregroundStyle(foregroundColor)
-            .clipShape(RoundedRectangle(cornerRadius: Radius.lg))
+            .clipShape(RoundedRectangle(cornerRadius: Radius.sm))
             .overlay(
-                RoundedRectangle(cornerRadius: Radius.lg)
-                    .strokeBorder(borderColor, lineWidth: style == .ghost ? 0 : 0)
+                RoundedRectangle(cornerRadius: Radius.sm)
+                    .strokeBorder(borderColor, lineWidth: hasBorder ? 1 : 0)
             )
             .opacity(isDisabled || isLoading ? 0.5 : 1)
         }
@@ -51,20 +51,20 @@ struct RBButton: View {
         .buttonStyle(.plain)
     }
 
-    // MARK: Colors
+    // MARK: Colors (Ant Design v5)
     private var backgroundColor: Color {
         switch style {
-        case .primary:     return .rbMedium
-        case .accent:      return .rbAccent
+        case .primary:     return .rbSurface   // default antd: blanco
+        case .accent:      return .rbAccent    // primary antd
         case .secondary:   return .rbBackground
-        case .destructive: return .rbError
-        case .ghost:       return .clear
+        case .destructive: return .rbError     // danger antd
+        case .ghost:       return .clear       // text antd
         }
     }
 
     private var foregroundColor: Color {
         switch style {
-        case .primary:     return .white
+        case .primary:     return .rbPrimary
         case .accent:      return .white
         case .secondary:   return .rbPrimary
         case .destructive: return .white
@@ -74,16 +74,21 @@ struct RBButton: View {
 
     private var borderColor: Color {
         switch style {
-        case .secondary: return .rbLightGray
-        default:         return .clear
+        case .primary, .secondary: return .rbLightGray
+        default:                   return .clear
         }
+    }
+
+    private var hasBorder: Bool {
+        style == .primary || style == .secondary
     }
 }
 
 // MARK: - Preview
 #Preview {
     VStack(spacing: Spacing.md) {
-        RBButton(title: "Confirmar venta", style: .primary) {}
+        RBButton(title: "Confirmar venta", style: .accent) {}
+        RBButton(title: "Default", style: .primary) {}
         RBButton(title: "Cobrar", style: .accent, icon: "creditcard") {}
         RBButton(title: "Cancelar", style: .secondary) {}
         RBButton(title: "Eliminar", style: .destructive, icon: "trash") {}

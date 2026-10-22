@@ -45,12 +45,13 @@ struct RBBadge: View {
     }
 
     private var foregroundColor: Color {
+        // Tonos "7" de antd para texto sobre fondo tenue (tag style)
         switch style {
-        case .warning:        return Color(hex: "#B87A00")
-        case .error:          return .rbError
-        case .success:        return Color(hex: "#1A7A34")
-        case .debt:           return Color(hex: "#B85A00")
-        case .info:           return .rbGray
+        case .warning:        return Color(hex: "#D48806") // gold-7
+        case .error:          return Color(hex: "#CF1322") // red-7
+        case .success:        return Color(hex: "#389E0D") // green-7
+        case .debt:           return Color(hex: "#D46B08") // orange-7
+        case .info:           return .rbMedium
         case .custom(let c):  return c
         }
     }

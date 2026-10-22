@@ -65,7 +65,7 @@ struct Step4ProductsView: View {
             Spacer()
 
             VStack(spacing: Spacing.sm) {
-                RBButton(title: "Finalizar", style: .primary, icon: "checkmark") {
+                RBButton(title: "Finalizar", style: .accent, icon: "checkmark") {
                     appState.completeOnboarding()
                 }
 

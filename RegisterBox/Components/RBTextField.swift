@@ -96,7 +96,12 @@ struct RBTextField: View {
             .clipShape(RoundedRectangle(cornerRadius: Radius.sm))
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.sm)
-                    .strokeBorder(borderColor, lineWidth: 1.5)
+                    .strokeBorder(borderColor, lineWidth: 1)
+            )
+            // Anillo de foco estilo antd
+            .overlay(
+                RoundedRectangle(cornerRadius: Radius.sm)
+                    .strokeBorder(Color.rbAccent.opacity(isFocused && errorMessage == nil ? 0.2 : 0), lineWidth: 4)
             )
             .animation(.easeInOut(duration: 0.15), value: isFocused)
 

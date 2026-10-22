@@ -53,7 +53,7 @@ struct Step1WelcomeView: View {
             Spacer()
 
             // Botón siguiente
-            RBButton(title: "Comenzar", style: .primary, icon: "arrow.right") {
+            RBButton(title: "Comenzar", style: .accent, icon: "arrow.right") {
                 let trimmed = storeName.trimmingCharacters(in: .whitespaces)
                 guard !trimmed.isEmpty else {
                     showError = true

@@ -103,6 +103,8 @@ struct InventoryView: View {
                     .scrollDismissesKeyboard(.immediately)
                 }
             }
+            .contentShape(Rectangle())
+            .simultaneousGesture(TapGesture().onEnded { hideKeyboard() })
             .navigationTitle("Inventario")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -209,6 +211,9 @@ private struct ProductRow: View {
         .padding(Spacing.sm)
         .background(Color.rbSurface)
         .clipShape(RoundedRectangle(cornerRadius: Radius.md))
-        .rbShadow()
+        .overlay(
+            RoundedRectangle(cornerRadius: Radius.md)
+                .strokeBorder(Color.rbLighterGray, lineWidth: 1)
+        )
     }
 }

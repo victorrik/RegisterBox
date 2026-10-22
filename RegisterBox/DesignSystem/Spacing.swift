@@ -24,18 +24,18 @@ enum Spacing {
     static let huge: CGFloat = 48
 }
 
-// MARK: - Corner Radius
+// MARK: - Corner Radius (Ant Design v5)
 enum Radius {
-    /// 4pt — chips pequeños, badges
-    static let xs:  CGFloat = 4
-    /// 8pt — inputs, elementos pequeños
-    static let sm:  CGFloat = 8
-    /// 12pt — cards, modales
-    static let md:  CGFloat = 12
-    /// 16pt — botones, sheets
-    static let lg:  CGFloat = 16
-    /// 24pt — elementos grandes
-    static let xl:  CGFloat = 24
+    /// 2pt — badges/tags (borderRadiusXS antd)
+    static let xs:  CGFloat = 2
+    /// 6pt — inputs, botones (borderRadius base antd)
+    static let sm:  CGFloat = 6
+    /// 8pt — cards (borderRadiusLG antd)
+    static let md:  CGFloat = 8
+    /// 8pt — botones (alineado con cards)
+    static let lg:  CGFloat = 8
+    /// 16pt — sheets
+    static let xl:  CGFloat = 16
     /// 32pt — pills, FAB
     static let full: CGFloat = 32
 }
@@ -43,10 +43,10 @@ enum Radius {
 // MARK: - Shadow
 struct RBShadow: ViewModifier {
     var color: Color = .rbShadow
-    var opacity: Double = 0.08
-    var radius: CGFloat = 8
+    var opacity: Double = 0.06
+    var radius: CGFloat = 16
     var x: CGFloat = 0
-    var y: CGFloat = 2
+    var y: CGFloat = 4
 
     func body(content: Content) -> some View {
         content.shadow(
@@ -59,8 +59,8 @@ struct RBShadow: ViewModifier {
 }
 
 extension View {
-    /// Sombra estándar de RegisterBox.
-    func rbShadow(opacity: Double = 0.08, radius: CGFloat = 8) -> some View {
+    /// Sombra sutil estilo Ant Design (boxShadowSecondary).
+    func rbShadow(opacity: Double = 0.06, radius: CGFloat = 16) -> some View {
         modifier(RBShadow(opacity: opacity, radius: radius))
     }
 }

@@ -1,49 +1,54 @@
 import SwiftUI
 
 // MARK: - Color Palette
-// Extraída del Figma: E-Commerce App UI Design Kit (Rubik / FetchMart)
+// Base de estilo: Ant Design v5 (tokens oficiales).
+// El texto usa opacidad sobre negro siguiendo el patrón de antd.
 
 extension Color {
 
-    // MARK: Text
-    /// Texto principal, títulos — #171A1C
-    static let rbPrimary     = Color(hex: "#171A1C")
-    /// Texto secundario — #26292B
-    static let rbDark        = Color(hex: "#26292B")
-    /// Iconos, bordes, texto sobre fondo claro — #303336
-    static let rbMedium      = Color(hex: "#303336")
-    /// Placeholders, texto deshabilitado — #828384
-    static let rbGray        = Color(hex: "#828384")
+    // MARK: Text (opacidad sobre negro — antd)
+    /// Texto principal, títulos — colorText (negro 88%)
+    static let rbPrimary     = Color.black.opacity(0.88)
+    /// Alias de rbPrimary (antd no distingue este nivel extra)
+    static let rbDark        = Color.black.opacity(0.88)
+    /// Texto secundario — colorTextSecondary (negro 65%)
+    static let rbMedium      = Color.black.opacity(0.65)
+    /// Terciario / placeholders — colorTextTertiary (negro 45%)
+    static let rbGray        = Color.black.opacity(0.45)
+    /// Texto deshabilitado — colorTextDisabled (negro 25%)
+    static let rbTextDisabled = Color.black.opacity(0.25)
 
     // MARK: Borders & Dividers
-    /// Bordes suaves — #BFC0C1
-    static let rbLightGray   = Color(hex: "#BFC0C1")
-    /// Fondos alternativos — #E0E0E1
-    static let rbLighterGray = Color(hex: "#E0E0E1")
+    /// Bordes — colorBorder #D9D9D9
+    static let rbLightGray   = Color(hex: "#D9D9D9")
+    /// Divisores / split — colorBorderSecondary #F0F0F0
+    static let rbLighterGray = Color(hex: "#F0F0F0")
 
     // MARK: Backgrounds
-    /// Fondo general de la app — #F2F2F2
-    static let rbBackground  = Color(hex: "#F2F2F2")
-    /// Fondo de cards y superficies elevadas — #F6F7FB
-    static let rbSurface     = Color(hex: "#F6F7FB")
+    /// Fondo general de la app — colorBgLayout #F5F5F5
+    static let rbBackground  = Color(hex: "#F5F5F5")
+    /// Fondo de cards y superficies — colorBgContainer #FFFFFF
+    static let rbSurface     = Color(hex: "#FFFFFF")
     /// Blanco puro — #FFFFFF
     static let rbWhite       = Color.white
+    /// Fondo de selección/hover — primary-1 #E6F4FF
+    static let rbPrimaryBg   = Color(hex: "#E6F4FF")
 
-    // MARK: Accent & Semantic
-    /// Acción primaria, botones principales — #2C21FC
-    static let rbAccent      = Color(hex: "#2C21FC")
-    /// Alertas, stock bajo, advertencias — #F7A827
-    static let rbWarning     = Color(hex: "#F7A827")
-    /// Error, stock agotado, destructivo — #FF3B30
-    static let rbError       = Color(hex: "#FF3B30")
-    /// Éxito, venta confirmada — #34C759
-    static let rbSuccess     = Color(hex: "#34C759")
-    /// Deuda / pendiente — #FF9500
-    static let rbDebt        = Color(hex: "#FF9500")
+    // MARK: Accent & Semantic (antd v5)
+    /// Acción primaria — colorPrimary (Daybreak Blue) #1677FF
+    static let rbAccent      = Color(hex: "#1677FF")
+    /// Advertencias — colorWarning #FAAD14
+    static let rbWarning     = Color(hex: "#FAAD14")
+    /// Error / destructivo — colorError #FF4D4F
+    static let rbError       = Color(hex: "#FF4D4F")
+    /// Éxito — colorSuccess #52C41A
+    static let rbSuccess     = Color(hex: "#52C41A")
+    /// Deuda / pendiente — orange-6 #FA8C16
+    static let rbDebt        = Color(hex: "#FA8C16")
 
     // MARK: Shadow
-    /// Color base para sombras — #000D09
-    static let rbShadow      = Color(hex: "#000D09")
+    /// Color base para sombras — negro (opacidad baja en uso)
+    static let rbShadow      = Color.black
 }
 
 // MARK: - Hex Initializer

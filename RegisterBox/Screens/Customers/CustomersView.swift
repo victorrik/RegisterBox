@@ -83,6 +83,8 @@ struct CustomersView: View {
                     .scrollDismissesKeyboard(.immediately)
                 }
             }
+            .contentShape(Rectangle())
+            .simultaneousGesture(TapGesture().onEnded { hideKeyboard() })
             .navigationTitle("Clientes")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -153,6 +155,9 @@ private struct CustomerRow: View {
         .padding(Spacing.sm)
         .background(Color.rbSurface)
         .clipShape(RoundedRectangle(cornerRadius: Radius.md))
-        .rbShadow()
+        .overlay(
+            RoundedRectangle(cornerRadius: Radius.md)
+                .strokeBorder(Color.rbLighterGray, lineWidth: 1)
+        )
     }
 }

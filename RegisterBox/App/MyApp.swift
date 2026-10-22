@@ -35,6 +35,7 @@ struct MyApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .preferredColorScheme(.light) // la paleta antd está diseñada para tema claro
                 .modelContainer(container)
                 .environment(appState)
                 .environment(cartStore)
