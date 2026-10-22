@@ -10,6 +10,7 @@ struct CheckoutView: View {
 
     @State private var showCustomerPicker = false
     @State private var errorMessage: String?
+    @State private var amountText = ""
 
     var body: some View {
         NavigationStack {
@@ -119,14 +120,14 @@ struct CheckoutView: View {
             RBTextField(
                 label: "Monto recibido",
                 placeholder: "0.00",
-                text: Binding(
-                    get: { String(format: "%.2f", NSDecimalNumber(decimal: viewModel.amountReceived).doubleValue) },
-                    set: { viewModel.amountReceived = Decimal(string: $0) ?? 0 }
-                ),
+                text: $amountText,
                 keyboardType: .decimalPad,
                 icon: "dollarsign.circle"
             )
             .padding(.horizontal, Spacing.md)
+            .onChange(of: amountText) { _, newValue in
+                viewModel.amountReceived = Decimal(string: newValue.replacingOccurrences(of: ",", with: ".")) ?? 0
+            }
 
             if viewModel.amountReceived > 0 {
                 HStack {
