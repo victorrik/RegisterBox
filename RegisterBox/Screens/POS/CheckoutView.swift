@@ -70,6 +70,7 @@ struct CheckoutView: View {
                 }
             }
             .scrollDismissesKeyboard(.interactively)
+            .simultaneousGesture(TapGesture().onEnded { hideKeyboard() })
             .navigationTitle("Cobrar")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

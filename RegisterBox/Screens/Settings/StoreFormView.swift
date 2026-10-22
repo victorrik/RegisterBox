@@ -52,6 +52,7 @@ struct StoreFormView: View {
                 .padding(Spacing.md)
             }
             .scrollDismissesKeyboard(.interactively)
+            .simultaneousGesture(TapGesture().onEnded { hideKeyboard() })
             .navigationTitle("Editar tienda")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

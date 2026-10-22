@@ -124,6 +124,7 @@ private struct QuickProductFormSheet: View {
                 .padding(Spacing.md)
             }
             .scrollDismissesKeyboard(.interactively)
+            .simultaneousGesture(TapGesture().onEnded { hideKeyboard() })
             .navigationTitle("Nuevo producto")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

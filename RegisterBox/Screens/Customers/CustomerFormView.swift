@@ -38,6 +38,7 @@ struct CustomerFormView: View {
                 .padding(Spacing.md)
             }
             .scrollDismissesKeyboard(.interactively)
+            .simultaneousGesture(TapGesture().onEnded { hideKeyboard() })
             .navigationTitle(isEditing ? "Editar cliente" : "Nuevo cliente")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

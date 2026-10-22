@@ -184,6 +184,7 @@ struct CategoryFormSheet: View {
                 .padding(Spacing.md)
             }
             .scrollDismissesKeyboard(.interactively)
+            .simultaneousGesture(TapGesture().onEnded { hideKeyboard() })
             .navigationTitle("Nueva categoría")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

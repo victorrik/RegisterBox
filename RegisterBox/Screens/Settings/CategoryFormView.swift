@@ -64,6 +64,7 @@ struct CategoryFormView: View {
                 .padding(Spacing.md)
             }
             .scrollDismissesKeyboard(.interactively)
+            .simultaneousGesture(TapGesture().onEnded { hideKeyboard() })
             .navigationTitle(isEditing ? "Editar categoría" : "Nueva categoría")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

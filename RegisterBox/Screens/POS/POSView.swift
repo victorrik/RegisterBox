@@ -58,6 +58,13 @@ struct POSView: View {
             viewModel = vm
             await vm.load()
         }
+        .onAppear {
+            // Recarga al volver al tab de POS para reflejar productos/categorías
+            // creados en otras pantallas (Inventario, Settings).
+            if let viewModel {
+                Task { await viewModel.load() }
+            }
+        }
     }
 
     // MARK: - Shared POS Content

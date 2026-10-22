@@ -54,6 +54,7 @@ struct PaymentFormSheet: View {
                 .padding(.horizontal, Spacing.md)
             }
             .scrollDismissesKeyboard(.interactively)
+            .simultaneousGesture(TapGesture().onEnded { hideKeyboard() })
             .navigationTitle("Registrar abono")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

@@ -120,6 +120,7 @@ struct ProductFormView: View {
                 .padding(Spacing.md)
             }
             .scrollDismissesKeyboard(.interactively)
+            .simultaneousGesture(TapGesture().onEnded { hideKeyboard() })
             .navigationTitle(isEditing ? "Editar producto" : "Nuevo producto")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
