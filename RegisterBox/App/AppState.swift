@@ -6,7 +6,14 @@ import SwiftUI
 final class AppState {
 
     // MARK: - Active Store
-    var activeStore: Store?
+    var activeStore: Store? {
+        didSet { UserDefaults.standard.set(activeStore?.id.uuidString, forKey: "activeStoreId") }
+    }
+
+    /// Id de la última tienda activa, para restaurarla al reabrir la app.
+    var activeStoreId: UUID? {
+        UserDefaults.standard.string(forKey: "activeStoreId").flatMap(UUID.init)
+    }
 
     // MARK: - Onboarding
     // Guardamos en UserDefaults manualmente para que @Observable

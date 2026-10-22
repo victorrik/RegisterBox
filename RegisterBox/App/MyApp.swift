@@ -89,7 +89,8 @@ struct RootView: View {
         isRestoringStore = true
         defer { isRestoringStore = false }
 
-        if let store = try? await storeService.fetch().first {
+        let stores = (try? await storeService.fetch()) ?? []
+        if let store = stores.first(where: { $0.id == appState.activeStoreId }) ?? stores.first {
             appState.activeStore = store
         } else {
             // No hay tienda persistida: el onboarding quedó marcado como

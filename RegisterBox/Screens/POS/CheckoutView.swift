@@ -33,12 +33,9 @@ struct CheckoutView: View {
                     }
                     .padding(.top, Spacing.lg)
 
-                    // Selector de modo
-                    HStack(spacing: Spacing.xs) {
-                        modeButton(.paid, title: "Pagado", icon: "checkmark.circle.fill")
-                        modeButton(.debt, title: "En deuda", icon: "clock.fill")
-                    }
-                    .padding(.horizontal, Spacing.md)
+                    // Checkbox de deuda
+                    debtCheckbox
+                        .padding(.horizontal, Spacing.md)
 
                     // Contenido según modo
                     switch viewModel.checkoutMode {
@@ -82,33 +79,45 @@ struct CheckoutView: View {
             }
             .background(Color.rbBackground.ignoresSafeArea())
             .sheet(isPresented: $showCustomerPicker) {
-                CustomerPickerSheet(customers: viewModel.customers) { customer in
-                    cartStore.selectedCustomer = customer
-                }
+                CustomerPickerSheet(
+                    customers: viewModel.customers,
+                    onSelect: { customer in cartStore.selectedCustomer = customer },
+                    onCreate: { name, phone in
+                        try await viewModel.createCustomer(name: name, phone: phone)
+                    }
+                )
             }
         }
     }
 
-    // MARK: - Mode Button
-    @ViewBuilder
-    private func modeButton(_ mode: POSViewModel.CheckoutMode, title: String, icon: String) -> some View {
+    // MARK: - Debt Checkbox
+    private var isDebt: Bool { viewModel.checkoutMode == .debt }
+
+    private var debtCheckbox: some View {
         Button {
-            viewModel.checkoutMode = mode
+            viewModel.checkoutMode = isDebt ? .paid : .debt
         } label: {
-            VStack(spacing: Spacing.xxs) {
-                Image(systemName: icon)
+            HStack(spacing: Spacing.sm) {
+                Image(systemName: isDebt ? "checkmark.square.fill" : "square")
                     .font(.system(size: IconSize.lg))
-                Text(title)
-                    .font(.rbButtonSm)
+                    .foregroundStyle(isDebt ? Color.rbAccent : Color.rbGray)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Marcar como deuda")
+                        .font(.rbButtonSm)
+                        .foregroundStyle(Color.rbPrimary)
+                    Text(isDebt ? "Se registrará como pendiente de pago" : "Se registrará como pagada")
+                        .font(.rbCaption)
+                        .foregroundStyle(Color.rbGray)
+                }
+                Spacer()
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, Spacing.sm)
-            .background(viewModel.checkoutMode == mode ? Color.rbAccent.opacity(0.1) : Color.rbSurface)
-            .foregroundStyle(viewModel.checkoutMode == mode ? Color.rbAccent : Color.rbMedium)
+            .padding(Spacing.md)
+            .background(Color.rbSurface)
             .clipShape(RoundedRectangle(cornerRadius: Radius.md))
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.md)
-                    .strokeBorder(viewModel.checkoutMode == mode ? Color.rbAccent : Color.clear, lineWidth: 2)
+                    .strokeBorder(isDebt ? Color.rbAccent : Color.rbLighterGray, lineWidth: 1)
             )
         }
         .buttonStyle(.plain)

@@ -81,6 +81,12 @@ final class CartStore {
         items.removeAll { $0.id == item.id }
     }
 
+    /// Decrementa por producto (elimina si llega a 0). Usado desde las cards del POS.
+    func decrement(productId: UUID) {
+        guard let item = items.first(where: { $0.productId == productId }) else { return }
+        decrement(item)
+    }
+
     /// Verifica si un producto ya está en el carrito.
     func quantity(for productId: UUID) -> Int {
         items.first(where: { $0.productId == productId })?.quantity ?? 0

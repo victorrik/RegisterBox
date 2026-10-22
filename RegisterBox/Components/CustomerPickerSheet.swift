@@ -6,8 +6,11 @@ struct CustomerPickerSheet: View {
     @Environment(\.dismiss) private var dismiss
     let customers: [Customer]
     let onSelect: (Customer) -> Void
+    /// Crea un cliente nuevo y lo devuelve ya persistido para seleccionarlo.
+    var onCreate: ((String, String?) async throws -> Customer)? = nil
 
     @State private var searchText = ""
+    @State private var showCreateForm = false
 
     private var filtered: [Customer] {
         if searchText.isEmpty { return customers }
@@ -66,6 +69,26 @@ struct CustomerPickerSheet: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancelar") { dismiss() }
                         .foregroundStyle(Color.rbGray)
+                }
+                if onCreate != nil {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button {
+                            showCreateForm = true
+                        } label: {
+                            Image(systemName: "plus")
+                                .foregroundStyle(Color.rbAccent)
+                        }
+                    }
+                }
+            }
+            .sheet(isPresented: $showCreateForm) {
+                CustomerFormView(customer: nil) { name, phone in
+                    Task {
+                        if let created = try? await onCreate?(name, phone) {
+                            onSelect(created)
+                            dismiss()
+                        }
+                    }
                 }
             }
         }

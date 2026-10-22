@@ -93,6 +93,10 @@ struct SettingsView: View {
                                 .buttonStyle(.plain)
                             }
                         }
+
+                        RBButton(title: "Cambiar de tienda", style: .secondary, icon: "arrow.triangle.2.circlepath") {
+                            appState.resetOnboarding()
+                        }
                     }
 
                     // Sección categorías

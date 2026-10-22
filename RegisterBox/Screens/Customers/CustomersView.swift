@@ -53,6 +53,7 @@ struct CustomersView: View {
                 )
                 .padding(.horizontal, Spacing.md)
                 .padding(.top, Spacing.sm)
+                .padding(.bottom, Spacing.md)
 
                 // Lista
                 if vm.filteredCustomers.isEmpty {

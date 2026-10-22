@@ -33,6 +33,12 @@ struct SalesHistoryView: View {
             viewModel = vm
             await vm.load()
         }
+        .onAppear {
+            // Recarga al volver al tab para reflejar ventas recién creadas en POS.
+            if let viewModel {
+                Task { await viewModel.load() }
+            }
+        }
     }
 
     // MARK: - Content
@@ -42,6 +48,9 @@ struct SalesHistoryView: View {
             VStack(spacing: 0) {
                 // Filtro de status
                 statusFilter(vm)
+
+                // Filtro por día
+                dateFilter(vm)
 
                 // Lista
                 if vm.filteredSales.isEmpty {
@@ -80,7 +89,7 @@ struct SalesHistoryView: View {
                         Task { try? await vm.registerPayment(sale: sale, amount: amount) }
                     }
                 )
-                .presentationDetents([.medium, .large])
+                .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
             }
         }
@@ -102,6 +111,45 @@ struct SalesHistoryView: View {
         }
         .padding(.horizontal, Spacing.md)
         .padding(.top, Spacing.sm)
+        .padding(.bottom, Spacing.xs)
+    }
+
+    // MARK: - Date Filter
+    @ViewBuilder
+    private func dateFilter(_ vm: HistoryViewModel) -> some View {
+        HStack(spacing: Spacing.xs) {
+            if vm.dateFilter != nil {
+                DatePicker(
+                    "",
+                    selection: Binding(
+                        get: { vm.dateFilter ?? Date() },
+                        set: { vm.dateFilter = $0 }
+                    ),
+                    displayedComponents: .date
+                )
+                .labelsHidden()
+
+                Button {
+                    vm.dateFilter = nil
+                } label: {
+                    Label("Todos los días", systemImage: "xmark.circle.fill")
+                        .font(.rbLabel)
+                        .foregroundStyle(Color.rbGray)
+                }
+                .buttonStyle(.plain)
+            } else {
+                Button {
+                    vm.dateFilter = Date()
+                } label: {
+                    Label("Filtrar por día", systemImage: "calendar")
+                        .font(.rbLabel)
+                        .foregroundStyle(Color.rbAccent)
+                }
+                .buttonStyle(.plain)
+            }
+            Spacer()
+        }
+        .padding(.horizontal, Spacing.md)
         .padding(.bottom, Spacing.xs)
     }
 

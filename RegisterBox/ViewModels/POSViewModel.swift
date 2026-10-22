@@ -8,6 +8,7 @@ final class POSViewModel {
     var products: [Product] = []
     var categories: [Category] = []
     var selectedCategory: Category?
+    var searchText: String = ""
     var customers: [Customer] = []
     var isLoading = false
     var error: String?
@@ -58,10 +59,17 @@ final class POSViewModel {
 
     // MARK: - Filtering
     var filteredProducts: [Product] {
+        var result = products
         if let selectedCategory {
-            return products.filter { $0.category?.id == selectedCategory.id }
+            result = result.filter { $0.category?.id == selectedCategory.id }
         }
-        return products
+        let query = searchText.trimmingCharacters(in: .whitespaces).lowercased()
+        if !query.isEmpty {
+            result = result.filter {
+                $0.name.lowercased().contains(query) || $0.sku.lowercased().contains(query)
+            }
+        }
+        return result
     }
 
     // MARK: - Checkout
@@ -91,5 +99,14 @@ final class POSViewModel {
         cartStore.clear()
         amountReceived = 0
         return sale
+    }
+
+    /// Crea un cliente nuevo desde el flujo de cobro y refresca la lista.
+    @discardableResult
+    func createCustomer(name: String, phone: String?) async throws -> Customer {
+        let customer = Customer(name: name, phone: phone, store: store)
+        try await customerService.create(customer)
+        customers = try await customerService.fetchAll(storeId: store.id)
+        return customer
     }
 }

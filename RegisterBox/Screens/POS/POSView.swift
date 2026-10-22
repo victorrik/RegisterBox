@@ -71,6 +71,19 @@ struct POSView: View {
     @ViewBuilder
     private func posContent(_ vm: POSViewModel) -> some View {
         VStack(spacing: 0) {
+            RBTextField(
+                label: "",
+                placeholder: "Buscar producto o SKU...",
+                text: Binding(
+                    get: { vm.searchText },
+                    set: { vm.searchText = $0 }
+                ),
+                icon: "magnifyingglass"
+            )
+            .padding(.horizontal, Spacing.md)
+            .padding(.top, Spacing.sm)
+            .padding(.bottom, Spacing.xs)
+
             CategoryChipsView(
                 categories: vm.categories,
                 selectedCategory: Binding(
@@ -97,7 +110,9 @@ struct POSView: View {
                                 product: product,
                                 cartQuantity: cartStore.quantity(for: product.id),
                                 isAtStockLimit: cartStore.isAtStockLimit(for: product.id),
-                                onTap: { cartStore.add(product) }
+                                onTap: { cartStore.add(product) },
+                                onIncrement: { cartStore.add(product) },
+                                onDecrement: { cartStore.decrement(productId: product.id) }
                             )
                         }
                     }

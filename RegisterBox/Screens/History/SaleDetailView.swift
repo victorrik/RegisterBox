@@ -120,15 +120,21 @@ struct SaleDetailView: View {
                         }
                     }
 
-                    // Registrar abono
-                    if sale.status == .debt {
-                        RBButton(title: "Registrar abono", style: .accent, icon: "dollarsign.circle") {
-                            showPaymentSheet = true
-                        }
-                    }
                 }
                 .padding(.horizontal, Spacing.md)
                 .padding(.bottom, Spacing.xxl)
+            }
+
+            // Registrar abono — fijo al fondo
+            if sale.status == .debt {
+                Divider()
+                RBButton(title: "Registrar abono", style: .accent, icon: "dollarsign.circle") {
+                    showPaymentSheet = true
+                }
+                .padding(.horizontal, Spacing.md)
+                .padding(.top, Spacing.sm)
+                .padding(.bottom, Spacing.md)
+                .background(Color.rbBackground)
             }
         }
         .background(Color.rbBackground.ignoresSafeArea())

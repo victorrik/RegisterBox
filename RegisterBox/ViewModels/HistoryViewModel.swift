@@ -8,6 +8,8 @@ final class HistoryViewModel {
     var sales: [Sale] = []
     var statusFilter: SaleStatus?
     var customerFilter: Customer?
+    /// Si está presente, solo se muestran las ventas de ese día. Si es nil, todas.
+    var dateFilter: Date?
     var isLoading = false
     var error: String?
 
@@ -45,6 +47,9 @@ final class HistoryViewModel {
         }
         if let customerFilter {
             result = result.filter { $0.customer?.id == customerFilter.id }
+        }
+        if let dateFilter {
+            result = result.filter { Calendar.current.isDate($0.createdAt, inSameDayAs: dateFilter) }
         }
         return result
     }
